@@ -81,19 +81,23 @@ func wrapIndexes(text string, width, indent int) []int {
 		return nil
 	}
 	trimmedText := strings.TrimRight(text, " ")
-	if runewidth.StringWidth(trimmedText) <= int(width) {
+	remainingWidth := runewidth.StringWidth(trimmedText)
+	if remainingWidth <= int(width) {
 		return nil
 	}
 	wrapIndexes := make([]int, 0)
 
 	// Assuming that the prefix (e.g. '=> ' for LinkLine) should never be wrapped.
 	i := indent
-	for runewidth.StringWidth(trimmedText[i:]) > width-indent {
+	remainingWidth -= indent // We know that all indent bytes are runes of width 1.
+	for remainingWidth > width-indent {
 		if isSingleRune(trimmedText[i:]) {
 			// There is a single rune on the last line, which is wider than width-indent.
 			break
 		}
+		oldI := i
 		i += indexOfNextWrapChar(text[i:], width-indent) + 1
+		remainingWidth -= runewidth.StringWidth(trimmedText[oldI:i])
 		wrapIndexes = append(wrapIndexes, i)
 	}
 	return wrapIndexes
