@@ -44,6 +44,7 @@ func BenchmarkWrapping(b *testing.B) {
 		b.Errorf("Could not parse input: %v", err)
 		return
 	}
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		for _, line := range lines {
 			if wrappable, ok := line.(parser.WrappableLine); ok {
