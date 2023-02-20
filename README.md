@@ -33,15 +33,17 @@ Up       : Scroll up one line
 Down     : Scroll down one line
 Page up  : Scroll up half a page
 Page down: Scroll down half a page
+/        : Start search
+?        : Start reverse search
+n        : Go to next search match
+p        : Go to previous search match
 0-9      : Enter link number
-Esc      : Reset link number
+Esc      : Clear input
 q        : Quit
 ```
 
 # TODO
 Here are some ideas on what could be added in the future, in no
 particular order:
-- Enable searching.
-	- I wan't "readline-style" keyboard shortcuts and a history to be available. [peterh/liner](https://github.com/peterh/liner) and [chzyer/readline](https://github.com/chzyer/readline) implement this, but don't seem to be usable with `tcell` (see [chzyer/readline #180](https://github.com/chzyer/readline/issues/180), [tcell #179](https://github.com/gdamore/tcell/issues/179) and [tcell #146](https://github.com/gdamore/tcell/issues/146)). Please let me know if you know other relevant libraries or have a different idea.
 - Viewing a table of contents and jumping to selected headings.
 - Enable passing forwards and backwards links as command line arguments.
