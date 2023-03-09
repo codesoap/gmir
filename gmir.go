@@ -1,6 +1,7 @@
 package gmir
 
 import (
+	"fmt"
 	"io"
 	"regexp"
 
@@ -48,6 +49,8 @@ func NewView(in io.Reader) (View, error) {
 	lines, err := parser.Parse(in)
 	if err != nil {
 		return View{}, err
+	} else if len(lines) == 0 {
+		return View{}, fmt.Errorf("given GMI is empty")
 	}
 	return View{
 		lines: lines,
