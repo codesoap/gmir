@@ -36,6 +36,18 @@ func (v *View) Scroll(screen tcell.Screen, lines int) {
 	// TODO: Maybe ensure the last line will not scroll over the bottom of screen.
 }
 
+// ScrollToTop scrolls to the first line.
+func (v *View) ScrollToTop(screen tcell.Screen) {
+	v.line = 0
+	v.lineOffset = 0
+}
+
+// ScrollToBottom scrolls to the last line.
+func (v *View) ScrollToBottom(screen tcell.Screen) {
+	v.line = len(v.lines) - 1
+	v.lineOffset = v.maxLineOffset(screen, v.line)
+}
+
 // ScrollDownToSearchMatch scrolls to the next line, that matches
 // v.Searchpattern. If the current line matches v.Searchpattern, nothing
 // is done.

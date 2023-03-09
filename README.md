@@ -33,6 +33,8 @@ Up       : Scroll up one line
 Down     : Scroll down one line
 Page up  : Scroll up half a page
 Page down: Scroll down half a page
+g        : Go to the top
+G        : Go to the bottom
 /        : Start search
 ?        : Start reverse search
 n        : Go to next search match
