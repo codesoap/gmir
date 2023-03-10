@@ -10,6 +10,7 @@ better with other Gemini software:
 - Preformatted text is never wrapped.
 - Indentation is added when wrapping e.g. list lines.
 - Syntax like headings and links are highlighted.
+- Jumping between headings is possible.
 - Selecting links is possible. The URL of the selection will be printed
   to stdout.
 
@@ -35,6 +36,8 @@ Page up  : Scroll up half a page
 Page down: Scroll down half a page
 g        : Go to the top
 G        : Go to the bottom
+h        : Go to next heading
+H        : Go to previous heading
 /        : Start search
 ?        : Start reverse search
 n        : Go to next search match
@@ -47,5 +50,4 @@ q        : Quit
 # TODO
 Here are some ideas on what could be added in the future, in no
 particular order:
-- Viewing a table of contents and jumping to selected headings.
 - Enable passing forwards and backwards links as command line arguments.

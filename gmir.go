@@ -11,8 +11,9 @@ import (
 )
 
 // TODO: right scroll
+// TODO: Select from search history.
 // TODO: Better name than lineOffset/LineOffset.
-// TODO: Search term, forward-/backward-link.
+// TODO: forward-/backward-link.
 // FIXME: Search term and scroll position are kept in two places. Make it one.
 
 type Mode int

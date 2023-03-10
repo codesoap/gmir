@@ -48,6 +48,41 @@ func (v *View) ScrollToBottom(screen tcell.Screen) {
 	v.lineOffset = v.maxLineOffset(screen, v.line)
 }
 
+// ScrollToNextHeading scrolls to the first line of the next heading.
+func (v *View) ScrollToNextHeading(screen tcell.Screen) {
+	if v.line == len(v.lines)-1 {
+		return
+	}
+	for i, line := range v.lines[v.line+1:] {
+		if isHeading(line) {
+			v.line += i + 1
+			v.lineOffset = 0
+			return
+		}
+	}
+}
+
+// ScrollToPrevHeading scrolls to the first line of the previous heading.
+func (v *View) ScrollToPrevHeading(screen tcell.Screen) {
+	if v.line == 0 {
+		return
+	}
+	for i := v.line - 1; i >= 0; i-- {
+		if isHeading(v.lines[i]) {
+			v.line = i
+			v.lineOffset = 0
+			return
+		}
+	}
+}
+
+func isHeading(line parser.Line) bool {
+	_, isHeading1 := line.(parser.Heading1Line)
+	_, isHeading2 := line.(parser.Heading2Line)
+	_, isHeading3 := line.(parser.Heading3Line)
+	return isHeading1 || isHeading2 || isHeading3
+}
+
 // ScrollDownToSearchMatch scrolls to the next line, that matches
 // v.Searchpattern. If the current line matches v.Searchpattern, nothing
 // is done.

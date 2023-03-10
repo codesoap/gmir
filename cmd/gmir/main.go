@@ -26,6 +26,8 @@ Page up  : Scroll up half a page
 Page down: Scroll down half a page
 g        : Go to the top
 G        : Go to the bottom
+h        : Go to next heading
+H        : Go to previous heading
 /        : Start search
 ?        : Start reverse search
 n        : Go to next search match
@@ -133,6 +135,10 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, s tcell.Screen) {
 			v.ScrollToTop(s)
 		case 'G':
 			v.ScrollToBottom(s)
+		case 'h':
+			v.ScrollToNextHeading(s)
+		case 'H':
+			v.ScrollToPrevHeading(s)
 		case 'p':
 			if !v.ScrollUpToNextSearchMatch(s) {
 				v.Info = "No previous match found."
