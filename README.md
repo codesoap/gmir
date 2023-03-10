@@ -1,18 +1,20 @@
-`gmir` is a reader for gmi files (of the Gemini protocol).
+`gmir` is a reader for gmi files (of the Gemini protocol). Its goal is
+to make reading gmi files more pleasant than with a pager like `less`,
+while also offering link selection.
+
+Features include word wrapping, syntax highlighting, jumping to headings
+and more.
+
+The link selection feature is intended to make `gmir`
+well suited as the pager for Gemini browsers like
+[acdw/bollux](https://tildegit.org/acdw/bollux),
+[chambln/gmi](https://sr.ht/~chambln/gmi/) or
+[blmayer/astro](https://github.com/blmayer/astro). Unlike with less,
+following links is possible without dropping back to a command prompt
+first.
 
 **`gmir` is still in its early development and behavior might change
 again.**
-
-The goal of `gmir` is to make reading gmi files more pleasant than with
-a pager like `less`, while also offering link selection to integrate
-better with other Gemini software:
-- Words are not broken when wrapping lines.
-- Preformatted text is never wrapped.
-- Indentation is added when wrapping e.g. list lines.
-- Syntax like headings and links are highlighted.
-- Jumping between headings is possible.
-- Selecting links is possible. The URL of the selection will be printed
-  to stdout.
 
 # Installation
 ```
