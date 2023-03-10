@@ -17,6 +17,10 @@ first.
 again.**
 
 # Installation
+You can find precompiled binaries at the
+[releases page](https://github.com/codesoap/gmir/releases). If you
+prefer to install from source, execute this:
+
 ```
 go install github.com/codesoap/gmir/cmd/gmir@latest
 ```
