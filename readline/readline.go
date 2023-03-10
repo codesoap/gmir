@@ -86,7 +86,7 @@ func ProcessKey(ev *tcell.EventKey) Status {
 			cursor = 0
 		}
 		return Done
-	case tcell.KeyEsc:
+	case tcell.KeyEsc, tcell.KeyCtrlC:
 		line = ""
 		cursor = 0
 		return Aborted
