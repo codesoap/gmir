@@ -51,7 +51,7 @@ n           : Go to next search match
 p           : Go to previous search match
 0-9         : Enter link number
 Esc         : Clear input
-q        : Quit
+q           : Quit
 ```
 
 # TODO
