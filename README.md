@@ -11,7 +11,8 @@ well suited as the pager for Gemini browsers like
 [chambln/gmi](https://sr.ht/~chambln/gmi/) or
 [blmayer/astro](https://github.com/blmayer/astro). Unlike with less,
 following links is possible without dropping back to a command prompt
-first.
+first. Once a link is selected, `gmir` quits and prints its URL to the
+standard output.
 
 **`gmir` is still in its early development and behavior might change
 again.**
