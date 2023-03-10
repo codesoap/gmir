@@ -20,21 +20,21 @@ gmir [FILE]
 If FILE is not given, standard input is read.
 
 Key bindings:
-Up       : Scroll up one line
-Down     : Scroll down one line
-Page up  : Scroll up half a page
-Page down: Scroll down half a page
-g        : Go to the top
-G        : Go to the bottom
-h        : Go to next heading
-H        : Go to previous heading
-/        : Start search
-?        : Start reverse search
-n        : Go to next search match
-p        : Go to previous search match
-0-9      : Enter link number
-Esc      : Clear input
-q        : Quit`)
+Up, k       : Scroll up one line
+Down, j     : Scroll down one line
+Page up, u  : Scroll up half a page
+Page down, d: Scroll down half a page
+g           : Go to the top
+G           : Go to the bottom
+h           : Go to next heading
+H           : Go to previous heading
+/           : Start search
+?           : Start reverse search
+n           : Go to next search match
+p           : Go to previous search match
+0-9         : Enter link number
+Esc         : Clear input
+q           : Quit`)
 }
 
 func main() {
@@ -131,6 +131,16 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, s tcell.Screen) {
 		case 'q':
 			s.Fini()
 			os.Exit(0)
+		case 'k':
+			v.Scroll(s, 1)
+		case 'j':
+			v.Scroll(s, -1)
+		case 'u':
+			_, height := s.Size()
+			v.Scroll(s, height/2)
+		case 'd':
+			_, height := s.Size()
+			v.Scroll(s, -height/2)
 		case 'g':
 			v.ScrollToTop(s)
 		case 'G':

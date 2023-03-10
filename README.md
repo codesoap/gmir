@@ -30,20 +30,20 @@ gmir [FILE]
 If FILE is not given, standard input is read.
 
 Key bindings:
-Up       : Scroll up one line
-Down     : Scroll down one line
-Page up  : Scroll up half a page
-Page down: Scroll down half a page
-g        : Go to the top
-G        : Go to the bottom
-h        : Go to next heading
-H        : Go to previous heading
-/        : Start search
-?        : Start reverse search
-n        : Go to next search match
-p        : Go to previous search match
-0-9      : Enter link number
-Esc      : Clear input
+Up, k       : Scroll up one line
+Down, j     : Scroll down one line
+Page up, u  : Scroll up half a page
+Page down, d: Scroll down half a page
+g           : Go to the top
+G           : Go to the bottom
+h           : Go to next heading
+H           : Go to previous heading
+/           : Start search
+?           : Start reverse search
+n           : Go to next search match
+p           : Go to previous search match
+0-9         : Enter link number
+Esc         : Clear input
 q        : Quit
 ```
 
