@@ -24,6 +24,8 @@ Up, k       : Scroll up one line
 Down, j     : Scroll down one line
 Page up, u  : Scroll up half a page
 Page down, d: Scroll down half a page
+b           : Scroll up a full page
+f, Space    : Scroll down a full page
 g           : Go to the top
 G           : Go to the bottom
 h           : Go to next heading
@@ -141,6 +143,12 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, s tcell.Screen) {
 		case 'd':
 			_, height := s.Size()
 			v.Scroll(s, -height/2)
+		case 'b':
+			_, height := s.Size()
+			v.Scroll(s, height-1)
+		case 'f', ' ':
+			_, height := s.Size()
+			v.Scroll(s, -height+1)
 		case 'g':
 			v.ScrollToTop(s)
 		case 'G':
