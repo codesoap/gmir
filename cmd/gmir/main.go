@@ -141,6 +141,12 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, s tcell.Screen) {
 		case 'd':
 			_, height := s.Size()
 			v.Scroll(s, -height/2)
+		case 'b':
+			_, height := s.Size()
+			v.Scroll(s, height)
+		case ' ':
+			_, height := s.Size()
+			v.Scroll(s, -height)
 		case 'g':
 			v.ScrollToTop(s)
 		case 'G':
