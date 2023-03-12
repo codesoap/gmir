@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	reLinkLine                = regexp.MustCompile(`^=>\s+(\S+)\s+(.+)\s*$`)
+	reLinkLine                = regexp.MustCompile(`^=>\s+(\S+)(\s+(.+))?\s*$`)
 	rePreformattingToggleLine = regexp.MustCompile("^```")
 	reHeading1Line            = regexp.MustCompile(`^#\s*(.+)\s*$`)
 	reHeading2Line            = regexp.MustCompile(`^##\s*(.+)\s*$`)
@@ -41,8 +41,13 @@ type Heading3Line struct{ text string }
 type ListLine struct{ text string }
 type QuoteLine struct{ text string }
 
-func (t TextLine) Text() string         { return t.text }
-func (l LinkLine) Text() string         { return fmt.Sprintf("=> %s (%s)", l.name, l.url) }
+func (t TextLine) Text() string { return t.text }
+func (l LinkLine) Text() string {
+	if l.name == "" {
+		return fmt.Sprintf("=> %s", l.url)
+	}
+	return fmt.Sprintf("=> %s (%s)", l.name, l.url)
+}
 func (p PreformattedLine) Text() string { return p.text }
 func (h Heading1Line) Text() string     { return "# " + h.text }
 func (h Heading2Line) Text() string     { return "## " + h.text }
@@ -184,7 +189,7 @@ func Parse(in io.Reader) ([]Line, error) {
 			continue
 		}
 		if m := reLinkLine.FindStringSubmatch(line); m != nil {
-			out = append(out, LinkLine{m[1], m[2]})
+			out = append(out, LinkLine{m[1], m[3]})
 			continue
 		}
 		if m := reHeading3Line.FindStringSubmatch(line); m != nil {
