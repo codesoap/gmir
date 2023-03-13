@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	reLinkLine                = regexp.MustCompile(`^=>\s+(\S+)(\s+(.+))?\s*$`)
+	reLinkLine                = regexp.MustCompile(`^=>\s*(\S+)(\s+(.+))?\s*$`)
 	rePreformattingToggleLine = regexp.MustCompile("^```")
 	reHeading1Line            = regexp.MustCompile(`^#\s*(.+)\s*$`)
 	reHeading2Line            = regexp.MustCompile(`^##\s*(.+)\s*$`)
