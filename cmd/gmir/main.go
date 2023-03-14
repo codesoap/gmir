@@ -22,6 +22,7 @@ If FILE is not given, standard input is read.
 Key bindings:
 Up, k       : Scroll up one line
 Down, j     : Scroll down one line
+Right, l    : Scroll right one column; reset with Esc
 Page up, u  : Scroll up half a page
 Page down, d: Scroll down half a page
 b           : Scroll up a full page
@@ -35,7 +36,7 @@ H           : Go to previous heading
 n           : Go to next search match
 p           : Go to previous search match
 0-9         : Enter link number
-Esc         : Clear input
+Esc         : Clear input and right scroll
 q           : Quit`)
 }
 
@@ -120,6 +121,8 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, s tcell.Screen) {
 		v.Scroll(s, 1)
 	case tcell.KeyDown:
 		v.Scroll(s, -1)
+	case tcell.KeyRight:
+		v.ColOffset += 1
 	case tcell.KeyPgUp:
 		_, height := s.Size()
 		v.Scroll(s, height/2)
@@ -127,6 +130,7 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, s tcell.Screen) {
 		_, height := s.Size()
 		v.Scroll(s, -height/2)
 	case tcell.KeyEsc:
+		v.ColOffset = 0
 		v.ClearLinknumber()
 	case tcell.KeyRune:
 		switch ev.Rune() {
@@ -137,6 +141,8 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, s tcell.Screen) {
 			v.Scroll(s, 1)
 		case 'j':
 			v.Scroll(s, -1)
+		case 'l':
+			v.ColOffset += 1
 		case 'u':
 			_, height := s.Size()
 			v.Scroll(s, height/2)

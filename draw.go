@@ -33,9 +33,27 @@ func (v View) Draw(screen tcell.Screen) {
 		// Screen too small.
 		return
 	}
+	maxColOffset := v.maxLineWidth(textWidth) - textWidth
+	if v.ColOffset > maxColOffset {
+		leftSpace -= maxColOffset
+	} else {
+		leftSpace -= v.ColOffset
+	}
 	v.drawLinkAndGMIColumn(screen, leftSpace, linkColWidth, textWidth)
 	v.drawBar(screen)
 	screen.Show()
+}
+
+func (v View) maxLineWidth(wrappedTextWidth int) int {
+	maxLineWidth := wrappedTextWidth
+	for _, line := range v.lines {
+		if _, isWrappable := line.(parser.WrappableLine); !isWrappable {
+			if lineWidth := runewidth.StringWidth(line.Text()); lineWidth > maxLineWidth {
+				maxLineWidth = lineWidth
+			}
+		}
+	}
+	return maxLineWidth
 }
 
 func (v View) drawLinkAndGMIColumn(screen tcell.Screen, offset, linkColWidth, textWidth int) {

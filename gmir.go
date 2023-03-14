@@ -10,7 +10,6 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-// TODO: right scroll
 // TODO: Select from search history.
 // TODO: Better name than lineOffset/LineOffset.
 // TODO: forward-/backward-link.
@@ -32,6 +31,11 @@ type View struct {
 
 	// Number of wrapped lines to skip within the first displayed line.
 	lineOffset int
+
+	// Number of columns to shift the content to the left. Useful for
+	// viewing preformatted text, that is wider than the screen. The
+	// shifting will be limited by the widest preformatted line in lines.
+	ColOffset int
 
 	// Linknumber while it is being typed.
 	linknumber string

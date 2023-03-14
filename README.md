@@ -36,6 +36,7 @@ If FILE is not given, standard input is read.
 Key bindings:
 Up, k       : Scroll up one line
 Down, j     : Scroll down one line
+Right, l    : Scroll right one column; reset with Esc
 Page up, u  : Scroll up half a page
 Page down, d: Scroll down half a page
 b           : Scroll up a full page
@@ -49,7 +50,7 @@ H           : Go to previous heading
 n           : Go to next search match
 p           : Go to previous search match
 0-9         : Enter link number
-Esc         : Clear input
+Esc         : Clear input and right scroll
 q           : Quit
 ```
 
