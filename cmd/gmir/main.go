@@ -14,10 +14,17 @@ import (
 	"github.com/gdamore/tcell/v2/encoding"
 )
 
+var (
+	uFlag bool
+)
+
 func showUsageInfo() {
 	fmt.Fprintln(flag.CommandLine.Output(), `Usage:
-gmir [FILE]
+gmir [-u] [FILE]
 If FILE is not given, standard input is read.
+
+Options:
+-u  Hide URLs of links by default
 
 Key bindings:
 Up, k       : Scroll up one line
@@ -42,16 +49,22 @@ V           : Show link URLs
 q           : Quit`)
 }
 
-func main() {
+func init() {
 	flag.Usage = showUsageInfo
+	flag.BoolVar(&uFlag, "u", false, "Hide URLs on link lines by default")
 	flag.Parse()
+}
 
+func main() {
 	in := getInput()
 	defer in.Close()
 	v, err := gmir.NewView(in)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Could not parse input:", err)
 		os.Exit(1)
+	}
+	if uFlag {
+		v.HideURLs()
 	}
 
 	encoding.Register()
@@ -204,11 +217,11 @@ func redraw(v gmir.View, s tcell.Screen) {
 }
 
 func getInput() io.ReadCloser {
-	if len(os.Args) > 2 {
+	if len(flag.Args()) > 1 {
 		fmt.Fprintln(os.Stderr, "Too many arguments.")
 		os.Exit(1)
-	} else if len(os.Args) == 2 {
-		file, err := os.Open(os.Args[1])
+	} else if len(flag.Args()) == 1 {
+		file, err := os.Open(flag.Args()[0])
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "Could not open given file:", err)
 			os.Exit(1)

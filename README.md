@@ -30,8 +30,11 @@ version 1.15 or older, use `go get` instead.
 ```
 $ gmir -h
 Usage:
-gmir [FILE]
+gmir [-u] [FILE]
 If FILE is not given, standard input is read.
+
+Options:
+-u  Hide URLs of links by default
 
 Key bindings:
 Up, k       : Scroll up one line

@@ -84,7 +84,8 @@ func (v View) links() []parser.LinkLine {
 }
 
 // FixLineOffset fixes v.lineOffset to ensure it does not go over the
-// amount of actually available wrapped lines. Use after screen resize.
+// amount of actually available wrapped lines. Use after screen resize
+// or any other event that changes the amount of wraps for a line.
 func (v *View) FixLineOffset(screen tcell.Screen) {
 	if v.lineOffset == 0 {
 		return
