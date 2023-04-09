@@ -62,4 +62,6 @@ q           : Quit
 # TODO
 Here are some ideas on what could be added in the future, in no
 particular order:
-- Enable passing forwards and backwards links as command line arguments.
+- Add key bindings for going back, forward and reloading a page.
+- Enable passing a "title" that is displayed in the status line. This
+  could be used to display the currently visited URL.
