@@ -13,6 +13,8 @@ import (
 )
 
 var (
+	ShowURLs = true // Always include URLs in the text of LinkLines.
+
 	reLinkLine                = regexp.MustCompile(`^=>\s*(\S+)(\s+(.+))?\s*$`)
 	rePreformattingToggleLine = regexp.MustCompile("^```")
 	reHeading1Line            = regexp.MustCompile(`^#\s*(.+)\s*$`)
@@ -45,8 +47,10 @@ func (t TextLine) Text() string { return t.text }
 func (l LinkLine) Text() string {
 	if l.name == "" {
 		return fmt.Sprintf("=> %s", l.url)
+	} else if ShowURLs {
+		return fmt.Sprintf("=> %s (%s)", l.name, l.url)
 	}
-	return fmt.Sprintf("=> %s (%s)", l.name, l.url)
+	return fmt.Sprintf("=> %s", l.name)
 }
 func (p PreformattedLine) Text() string { return p.text }
 func (h Heading1Line) Text() string     { return "# " + h.text }

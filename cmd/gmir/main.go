@@ -37,6 +37,8 @@ n           : Go to next search match
 p           : Go to previous search match
 0-9         : Enter link number
 Esc         : Clear input and right scroll
+v           : Hide link URLs
+V           : Show link URLs
 q           : Quit`)
 }
 
@@ -185,6 +187,12 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, s tcell.Screen) {
 				fmt.Println(url)
 				os.Exit(0)
 			}
+		case 'v':
+			v.HideURLs()
+			v.FixLineOffset(s)
+		case 'V':
+			v.ShowURLs()
+			v.FixLineOffset(s)
 		}
 	}
 	redraw(*v, s)

@@ -63,6 +63,16 @@ func NewView(in io.Reader) (View, error) {
 	}, nil
 }
 
+// ShowURLs enables the display of URLs for link lines.
+func (v *View) ShowURLs() {
+	parser.ShowURLs = true
+}
+
+// HideURLs disables the display of URLs for link lines.
+func (v *View) HideURLs() {
+	parser.ShowURLs = false
+}
+
 func (v View) links() []parser.LinkLine {
 	links := make([]parser.LinkLine, 0)
 	for _, line := range v.lines {
