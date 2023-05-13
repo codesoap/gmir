@@ -27,26 +27,27 @@ Options:
 -u  Hide URLs of links by default
 
 Key bindings:
-Up, k       : Scroll up one line
-Down, j     : Scroll down one line
-Right, l    : Scroll right one column; reset with Esc
-Page up, u  : Scroll up half a page
-Page down, d: Scroll down half a page
-b           : Scroll up a full page
-f, Space    : Scroll down a full page
-g           : Go to the top
-G           : Go to the bottom
-h           : Go to next heading
-H           : Go to previous heading
-/           : Start search
-?           : Start reverse search
-n           : Go to next search match
-p           : Go to previous search match
-0-9         : Enter link number
-Esc         : Clear input and right scroll
-v           : Hide link URLs
-V           : Show link URLs
-q           : Quit`)
+Up, k     : Scroll up one line
+Down, j   : Scroll down one line
+Right, l  : Scroll right one column; reset with Esc
+u         : Scroll up half a page
+d         : Scroll down half a page
+Page up, b: Scroll up a full page
+Page down,
+f, Space  : Scroll down a full page
+g         : Go to the top
+G         : Go to the bottom
+h         : Go to next heading
+H         : Go to previous heading
+/         : Start search
+?         : Start reverse search
+n         : Go to next search match
+p         : Go to previous search match
+0-9       : Enter link number
+Esc       : Clear input and right scroll
+v         : Hide link URLs
+V         : Show link URLs
+q         : Quit`)
 }
 
 func init() {
@@ -140,10 +141,10 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, s tcell.Screen) {
 		v.ColOffset += 1
 	case tcell.KeyPgUp:
 		_, height := s.Size()
-		v.Scroll(s, height/2)
+		v.Scroll(s, height-1)
 	case tcell.KeyPgDn:
 		_, height := s.Size()
-		v.Scroll(s, -height/2)
+		v.Scroll(s, -height+1)
 	case tcell.KeyEsc:
 		v.ColOffset = 0
 		v.ClearLinknumber()
