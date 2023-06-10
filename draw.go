@@ -10,7 +10,7 @@ import (
 )
 
 /*
-Draw draws the given view to screen. The screen is separted like this:
+Draw draws the given view to screen. The screen is separated like this:
 
 	   7cols   9cols     10cols     16cols
 	┌───────┬─────────┬──────────┬────────────────┐

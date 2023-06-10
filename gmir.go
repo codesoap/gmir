@@ -24,7 +24,7 @@ const (
 )
 
 // A View represents the whole state related to a document, including
-// it's content and scroll position.
+// its content and scroll position.
 type View struct {
 	lines []parser.Line
 	line  int // Index in lines of the first displayed line.
