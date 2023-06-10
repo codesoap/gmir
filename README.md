@@ -14,6 +14,8 @@ following links is possible without dropping back to a command prompt
 first. Once a link is selected, `gmir` quits and prints its URL to the
 standard output.
 
+![screenshot of gmir](./screenshot.png)
+
 # Installation
 You can find precompiled binaries at the
 [releases page](https://github.com/codesoap/gmir/releases). If you
