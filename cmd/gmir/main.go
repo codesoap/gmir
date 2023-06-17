@@ -39,12 +39,13 @@ g         : Go to the top
 G         : Go to the bottom
 h         : Go to next heading
 H         : Go to previous heading
+t         : Show table of contents
 /         : Start search
 ?         : Start reverse search
 n         : Go to next search match
 p         : Go to previous search match
 0-9       : Enter link number
-Esc       : Clear input and right scroll
+Esc       : Clear input and right scroll or exit table of contents
 v         : Hide link URLs
 V         : Show link URLs
 q         : Quit`)
@@ -59,13 +60,13 @@ func init() {
 func main() {
 	in := getInput()
 	defer in.Close()
-	v, err := gmir.NewView(in)
+	doc, err := gmir.NewView(in)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Could not parse input:", err)
 		os.Exit(1)
 	}
 	if uFlag {
-		v.HideURLs()
+		doc.HideURLs()
 	}
 
 	encoding.Register()
@@ -78,22 +79,33 @@ func main() {
 		fmt.Fprintf(os.Stderr, "%v\n", e)
 		os.Exit(1)
 	}
-	v.Draw(s)
+	doc.Draw(s)
+	toc := doc.TOCView()
+	drawTOC := false
 	for {
-		processEvent(s.PollEvent(), &v, s)
+		if drawTOC {
+			processEvent(s.PollEvent(), &toc, &drawTOC, s)
+		} else {
+			processEvent(s.PollEvent(), &doc, &drawTOC, s)
+		}
+		s.Clear()
+		if drawTOC {
+			toc.Draw(s)
+		} else {
+			doc.Draw(s)
+		}
 	}
 }
 
-func processEvent(event tcell.Event, v *gmir.View, s tcell.Screen) {
+func processEvent(event tcell.Event, v *gmir.View, drawTOC *bool, s tcell.Screen) {
 	switch ev := event.(type) {
 	case *tcell.EventResize:
 		s.Sync()
 		v.FixLineOffset(s)
-		redraw(*v, s)
 	case *tcell.EventKey:
 		switch v.Mode {
 		case gmir.Regular:
-			processKeyEvent(ev, v, s)
+			processKeyEvent(ev, v, drawTOC, s)
 		case gmir.Search, gmir.ReverseSearch:
 			switch readline.ProcessKey(ev) {
 			case readline.Reading:
@@ -125,12 +137,11 @@ func processEvent(event tcell.Event, v *gmir.View, s tcell.Screen) {
 				v.Cursor = 0
 				v.Mode = gmir.Regular
 			}
-			redraw(*v, s)
 		}
 	}
 }
 
-func processKeyEvent(ev *tcell.EventKey, v *gmir.View, s tcell.Screen) {
+func processKeyEvent(ev *tcell.EventKey, v *gmir.View, drawTOC *bool, s tcell.Screen) {
 	v.Info = ""
 	switch ev.Key() {
 	case tcell.KeyUp:
@@ -148,6 +159,7 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, s tcell.Screen) {
 	case tcell.KeyEsc:
 		v.ColOffset = 0
 		v.ClearLinknumber()
+		*drawTOC = false
 	case tcell.KeyRune:
 		switch ev.Rune() {
 		case 'q':
@@ -179,6 +191,8 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, s tcell.Screen) {
 			v.ScrollToNextHeading(s)
 		case 'H':
 			v.ScrollToPrevHeading(s)
+		case 't':
+			*drawTOC = true
 		case 'p':
 			if !v.ScrollUpToNextSearchMatch(s) {
 				v.Info = "No previous match found."
@@ -209,12 +223,6 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, s tcell.Screen) {
 			v.FixLineOffset(s)
 		}
 	}
-	redraw(*v, s)
-}
-
-func redraw(v gmir.View, s tcell.Screen) {
-	s.Clear()
-	v.Draw(s)
 }
 
 func getInput() io.ReadCloser {

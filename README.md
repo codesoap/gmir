@@ -51,12 +51,13 @@ g         : Go to the top
 G         : Go to the bottom
 h         : Go to next heading
 H         : Go to previous heading
+t         : Show table of contents
 /         : Start search
 ?         : Start reverse search
 n         : Go to next search match
 p         : Go to previous search match
 0-9       : Enter link number
-Esc       : Clear input and right scroll
+Esc       : Clear input and right scroll or exit table of contents
 v         : Hide link URLs
 V         : Show link URLs
 q         : Quit

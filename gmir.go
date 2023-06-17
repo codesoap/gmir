@@ -63,6 +63,21 @@ func NewView(in io.Reader) (View, error) {
 	}, nil
 }
 
+// TOCView returns a copy of v only containing headings. This copy is
+// suitable for use as a table of contents.
+func (v View) TOCView() View {
+	headings := make([]parser.Line, 0)
+	for _, line := range v.lines {
+		if isHeading(line) {
+			headings = append(headings, line)
+		}
+	}
+	return View{
+		lines: headings,
+		Mode:  Regular,
+	}
+}
+
 // ShowURLs enables the display of URLs for link lines.
 func (v *View) ShowURLs() {
 	parser.ShowURLs = true
