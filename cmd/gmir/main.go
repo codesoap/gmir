@@ -87,6 +87,10 @@ func main() {
 			processEvent(s.PollEvent(), &toc, &drawTOC, s)
 		} else {
 			processEvent(s.PollEvent(), &doc, &drawTOC, s)
+			if drawTOC && toc.IsEmpty() {
+				drawTOC = false
+				doc.Info = "Table of contents is empty"
+			}
 		}
 		s.Clear()
 		if drawTOC {

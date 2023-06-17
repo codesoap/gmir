@@ -78,6 +78,10 @@ func (v View) TOCView() View {
 	}
 }
 
+func (v View) IsEmpty() bool {
+	return len(v.lines) == 0
+}
+
 // ShowURLs enables the display of URLs for link lines.
 func (v *View) ShowURLs() {
 	parser.ShowURLs = true
