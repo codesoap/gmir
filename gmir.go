@@ -5,8 +5,8 @@ import (
 	"io"
 	"regexp"
 
-	"github.com/codesoap/gmir/linknumber"
 	"github.com/codesoap/gmir/parser"
+	"github.com/codesoap/gmir/selector"
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -37,8 +37,8 @@ type View struct {
 	// shifting will be limited by the widest preformatted line in lines.
 	ColOffset int
 
-	// Linknumber while it is being typed.
-	linknumber string
+	// Selector while it is being typed.
+	selector string
 
 	Mode          Mode
 	Searchterm    string         // The search term while it is being typed.
@@ -136,7 +136,7 @@ func (v View) maxLineOffset(screen tcell.Screen, line int) int {
 func (v View) columnWidths(screenWidth int) (leftSpace, linkColWidth, textWidth int) {
 	links := v.links()
 	if len(links) > 0 {
-		linkColWidth = len(linknumber.FromIndex(len(links)-1)) + 1
+		linkColWidth = len(selector.FromIndex(len(links)-1)) + 1
 	}
 	if screenWidth >= maxTextWidth+linkColWidth {
 		textWidth = maxTextWidth

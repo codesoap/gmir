@@ -3,8 +3,8 @@ package gmir
 import (
 	"strings"
 
-	"github.com/codesoap/gmir/linknumber"
 	"github.com/codesoap/gmir/parser"
+	"github.com/codesoap/gmir/selector"
 	"github.com/gdamore/tcell/v2"
 	"github.com/mattn/go-runewidth"
 )
@@ -68,7 +68,7 @@ func (v View) drawLinkAndGMIColumn(screen tcell.Screen, offset, linkColWidth, te
 			continue
 		}
 		if isLink {
-			linkSelector := linknumber.FromIndex(linkIndex)
+			linkSelector := selector.FromIndex(linkIndex)
 			linkSelector = strings.Repeat(" ", linkColWidth-len(linkSelector)-1) + linkSelector
 			emitStr(screen, offset, drawnLines, styleText, linkSelector)
 		}

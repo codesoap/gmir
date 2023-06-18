@@ -24,7 +24,7 @@ func (v View) drawBar(screen tcell.Screen) {
 	} else if v.Mode == Search || v.Mode == ReverseSearch {
 		v.drawSearchText(screen, leftWidth-1)
 	} else {
-		emitStr(screen, 0, screenHeight-1, styleBar, v.linknumber+" ")
+		emitStr(screen, 0, screenHeight-1, styleBar, v.selector+" ")
 	}
 }
 

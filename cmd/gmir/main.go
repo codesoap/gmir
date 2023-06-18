@@ -162,7 +162,7 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, drawTOC *bool, s tcell.Sc
 		v.Scroll(s, -height+1)
 	case tcell.KeyEsc:
 		v.ColOffset = 0
-		v.ClearLinknumber()
+		v.ClearSelector()
 		*drawTOC = false
 	case tcell.KeyRune:
 		switch ev.Rune() {
@@ -207,13 +207,13 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, drawTOC *bool, s tcell.Sc
 			}
 		case '/':
 			v.Mode = gmir.Search
-			v.ClearLinknumber()
+			v.ClearSelector()
 		case '?':
 			v.Mode = gmir.ReverseSearch
-			v.ClearLinknumber()
+			v.ClearSelector()
 		case '1', '2', '3', '4', '5', '6', '7', '8', '9', '0':
 			digit, _ := strconv.Atoi(string(ev.Rune()))
-			v.AddDigitToLinknumber(digit)
+			v.AddDigitToSelector(digit)
 			if url, ok := v.LinkURL(); ok {
 				s.Fini()
 				fmt.Println(url)
