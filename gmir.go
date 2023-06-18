@@ -133,19 +133,19 @@ func (v View) maxLineOffset(screen tcell.Screen, line int) int {
 	return 0
 }
 
-func (v View) columnWidths(screenWidth int) (leftSpace, linkColWidth, textWidth int) {
+func (v View) columnWidths(screenWidth int) (leftSpace, selectorColWidth, textWidth int) {
 	links := v.links()
 	if len(links) > 0 {
-		linkColWidth = len(selector.FromIndex(len(links)-1)) + 1
+		selectorColWidth = len(selector.FromIndex(len(links)-1)) + 1
 	}
-	if screenWidth >= maxTextWidth+linkColWidth {
+	if screenWidth >= maxTextWidth+selectorColWidth {
 		textWidth = maxTextWidth
-		space := screenWidth - (maxTextWidth + linkColWidth)
-		if space > linkColWidth+2 {
-			leftSpace = (space / 2) - linkColWidth
+		space := screenWidth - (maxTextWidth + selectorColWidth)
+		if space > selectorColWidth+2 {
+			leftSpace = (space / 2) - selectorColWidth
 		}
 	} else {
-		textWidth = screenWidth - linkColWidth
+		textWidth = screenWidth - selectorColWidth
 	}
-	return leftSpace, linkColWidth, textWidth
+	return leftSpace, selectorColWidth, textWidth
 }

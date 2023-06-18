@@ -15,7 +15,7 @@ func IsComplete(number string) bool {
 		leadingZeroes++
 	}
 	completeSelectorLen := leadingZeroes*2 + 1
-	// If len(number) > completeSelectorLen, the link can never become
+	// If len(number) > completeSelectorLen, the selector can never become
 	// complete. This is accepted for now.
 	return len(number) == completeSelectorLen
 }

@@ -12,24 +12,23 @@ import (
 /*
 Draw draws the given view to screen. The screen is separated like this:
 
-	   7cols   9cols     10cols     16cols
-	┌───────┬─────────┬──────────┬────────────────┐
-	│ left  │ link    │ rendered │ right space    │
-	│ space │ numbers │ gmi      │                │
-	│       │         │          │                │
-	├───────┴─────────┴──────────┴────────────────┤
-	│ bar                                         │
-	└─────────────────────────────────────────────┘
+	   7cols    11cols     10cols          18cols
+	┌───────┬───────────┬──────────┬──────────────────┐
+	│ left  │ selectors │ rendered │    right space   │
+	│ space │           │ gmi      │                  │
+	│       │           │          │                  │
+	├───────┴───────────┴──────────┴──────────────────┤
+	│ bar                                             │
+	└─────────────────────────────────────────────────┘
 
 The rendered gmi aims to be a width that is comfortable to read. The
-right space may be intruded by preformatted lines. The link numbers
-column will always be wide enough to fit the largest link number in the
-document.
+right space may be intruded by preformatted lines. The selector column
+will always be wide enough to fit the largest selector in the document.
 */
 func (v View) Draw(screen tcell.Screen) {
 	screenWidth, screenHeight := screen.Size()
-	leftSpace, linkColWidth, textWidth := v.columnWidths(screenWidth)
-	if screenWidth < linkColWidth+8 || screenHeight < 2 {
+	leftSpace, selectorColWidth, textWidth := v.columnWidths(screenWidth)
+	if screenWidth < selectorColWidth+8 || screenHeight < 2 {
 		// Screen too small.
 		return
 	}
@@ -39,7 +38,7 @@ func (v View) Draw(screen tcell.Screen) {
 	} else {
 		leftSpace -= v.ColOffset
 	}
-	v.drawLinkAndGMIColumn(screen, leftSpace, linkColWidth, textWidth)
+	v.drawSelectorAndGMIColumn(screen, leftSpace, selectorColWidth, textWidth)
 	v.drawBar(screen)
 	screen.Show()
 }
@@ -56,23 +55,23 @@ func (v View) maxLineWidth(wrappedTextWidth int) int {
 	return maxLineWidth
 }
 
-func (v View) drawLinkAndGMIColumn(screen tcell.Screen, offset, linkColWidth, textWidth int) {
+func (v View) drawSelectorAndGMIColumn(screen tcell.Screen, offset, selectorColWidth, textWidth int) {
 	_, screenHeight := screen.Size()
-	drawnLines, linkIndex := 0, -1
+	drawnLines, selectorIndex := 0, -1
 	for i := 0; i < len(v.lines) && drawnLines < screenHeight-1; i++ {
 		_, isLink := v.lines[i].(parser.LinkLine)
 		if isLink {
-			linkIndex++
+			selectorIndex++
 		}
 		if i < v.line {
 			continue
 		}
 		if isLink {
-			linkSelector := selector.FromIndex(linkIndex)
-			linkSelector = strings.Repeat(" ", linkColWidth-len(linkSelector)-1) + linkSelector
-			emitStr(screen, offset, drawnLines, styleText, linkSelector)
+			selector := selector.FromIndex(selectorIndex)
+			selector = strings.Repeat(" ", selectorColWidth-len(selector)-1) + selector
+			emitStr(screen, offset, drawnLines, styleText, selector)
 		}
-		drawnLines = v.drawLine(screen, i, drawnLines, offset+linkColWidth, textWidth)
+		drawnLines = v.drawLine(screen, i, drawnLines, offset+selectorColWidth, textWidth)
 	}
 }
 
