@@ -19,17 +19,30 @@ func (v *View) ClearSelector() {
 	v.selector = ""
 }
 
-// LinkURL returns the URL for v.selector. If the selector is not
-// complete or does not resolve to an existing link index, ok will be
-// false and url will be empty.
-func (v View) LinkURL() (url string, ok bool) {
-	if !selector.IsComplete(v.selector) {
-		return "", false
-	}
-	links := v.links()
+// SelectorNumber returns the currently selected index.
+func (v View) SelectorIndex() int {
+	return selector.ToIndex(v.selector)
+}
+
+// SelectorIsValid returns true, if the selector is complete and
+// resolves to a valid selectable.
+func (v View) SelectorIsValid() bool {
+	return selector.IsComplete(v.selector) && v.selectorIsInRange()
+}
+
+func (v View) selectorIsInRange() bool {
 	i := selector.ToIndex(v.selector)
-	if i >= len(links) {
-		return "", false
+	switch v.selectable {
+	case link:
+		return i < len(v.links())
+	case heading:
+		return i < len(v.headings())
 	}
-	return links[i].URL(), true
+	panic("unknown selectable")
+}
+
+// LinkURL returns the URL for v.selector.
+func (v View) LinkURL() string {
+	i := selector.ToIndex(v.selector)
+	return v.links()[i].URL()
 }

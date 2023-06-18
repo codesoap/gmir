@@ -76,6 +76,20 @@ func (v *View) ScrollToPrevHeading(screen tcell.Screen) {
 	}
 }
 
+// ScrollToNthHeading scrolls to the first line of the nth heading.
+func (v *View) ScrollToNthHeading(screen tcell.Screen, n int) {
+	for i, line := range v.lines {
+		if isHeading(line) {
+			n--
+			if n < 0 {
+				v.line = i
+				v.lineOffset = 0
+				return
+			}
+		}
+	}
+}
+
 func isHeading(line parser.Line) bool {
 	_, isHeading1 := line.(parser.Heading1Line)
 	_, isHeading2 := line.(parser.Heading2Line)

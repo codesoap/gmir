@@ -56,7 +56,7 @@ t         : Show table of contents
 ?         : Start reverse search
 n         : Go to next search match
 p         : Go to previous search match
-0-9       : Enter link number
+0-9       : Select link or table of contents entry
 Esc       : Clear input and right scroll or exit table of contents
 v         : Hide link URLs
 V         : Show link URLs

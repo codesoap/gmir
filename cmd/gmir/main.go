@@ -44,11 +44,24 @@ t         : Show table of contents
 ?         : Start reverse search
 n         : Go to next search match
 p         : Go to previous search match
-0-9       : Enter link number
+0-9       : Select link or table of contents entry
 Esc       : Clear input and right scroll or exit table of contents
 v         : Hide link URLs
 V         : Show link URLs
 q         : Quit`)
+}
+
+type views struct {
+	doc     gmir.View // The main view.
+	toc     gmir.View // The view with the table of contents.
+	showTOC bool
+}
+
+func (vs *views) activeView() *gmir.View {
+	if vs.showTOC {
+		return &vs.toc
+	}
+	return &vs.doc
 }
 
 func init() {
@@ -80,36 +93,28 @@ func main() {
 		os.Exit(1)
 	}
 	doc.Draw(s)
-	toc := doc.TOCView()
-	drawTOC := false
+	vs := views{
+		doc: doc,
+		toc: doc.TOCView(),
+	}
 	for {
-		if drawTOC {
-			processEvent(s.PollEvent(), &toc, &drawTOC, s)
-		} else {
-			processEvent(s.PollEvent(), &doc, &drawTOC, s)
-			if drawTOC && toc.IsEmpty() {
-				drawTOC = false
-				doc.Info = "Table of contents is empty"
-			}
-		}
+		processEvent(s.PollEvent(), &vs, s)
 		s.Clear()
-		if drawTOC {
-			toc.Draw(s)
-		} else {
-			doc.Draw(s)
-		}
+		vs.activeView().Draw(s)
 	}
 }
 
-func processEvent(event tcell.Event, v *gmir.View, drawTOC *bool, s tcell.Screen) {
+func processEvent(event tcell.Event, vs *views, s tcell.Screen) {
+	v := vs.activeView()
 	switch ev := event.(type) {
 	case *tcell.EventResize:
 		s.Sync()
-		v.FixLineOffset(s)
+		vs.doc.FixLineOffset(s)
+		vs.toc.FixLineOffset(s)
 	case *tcell.EventKey:
 		switch v.Mode {
 		case gmir.Regular:
-			processKeyEvent(ev, v, drawTOC, s)
+			processKeyEvent(ev, vs, s)
 		case gmir.Search, gmir.ReverseSearch:
 			switch readline.ProcessKey(ev) {
 			case readline.Reading:
@@ -145,7 +150,8 @@ func processEvent(event tcell.Event, v *gmir.View, drawTOC *bool, s tcell.Screen
 	}
 }
 
-func processKeyEvent(ev *tcell.EventKey, v *gmir.View, drawTOC *bool, s tcell.Screen) {
+func processKeyEvent(ev *tcell.EventKey, vs *views, s tcell.Screen) {
+	v := vs.activeView()
 	v.Info = ""
 	switch ev.Key() {
 	case tcell.KeyUp:
@@ -163,7 +169,7 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, drawTOC *bool, s tcell.Sc
 	case tcell.KeyEsc:
 		v.ColOffset = 0
 		v.ClearSelector()
-		*drawTOC = false
+		vs.showTOC = false
 	case tcell.KeyRune:
 		switch ev.Rune() {
 		case 'q':
@@ -196,7 +202,11 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, drawTOC *bool, s tcell.Sc
 		case 'H':
 			v.ScrollToPrevHeading(s)
 		case 't':
-			*drawTOC = true
+			if vs.toc.IsEmpty() {
+				v.Info = "Table of contents is empty"
+			} else {
+				vs.showTOC = true
+			}
 		case 'p':
 			if !v.ScrollUpToNextSearchMatch(s) {
 				v.Info = "No previous match found."
@@ -214,10 +224,16 @@ func processKeyEvent(ev *tcell.EventKey, v *gmir.View, drawTOC *bool, s tcell.Sc
 		case '1', '2', '3', '4', '5', '6', '7', '8', '9', '0':
 			digit, _ := strconv.Atoi(string(ev.Rune()))
 			v.AddDigitToSelector(digit)
-			if url, ok := v.LinkURL(); ok {
-				s.Fini()
-				fmt.Println(url)
-				os.Exit(0)
+			if v.SelectorIsValid() {
+				if vs.showTOC {
+					vs.showTOC = false
+					vs.doc.ScrollToNthHeading(s, v.SelectorIndex())
+					v.ClearSelector()
+				} else {
+					s.Fini()
+					fmt.Println(v.LinkURL())
+					os.Exit(0)
+				}
 			}
 		case 'v':
 			v.HideURLs()
