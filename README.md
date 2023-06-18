@@ -3,7 +3,7 @@ to make reading gmi files more pleasant than with a pager like `less`,
 while also offering link selection.
 
 Features include word wrapping, syntax highlighting, jumping to headings
-and more.
+through a table of contents and more.
 
 The link selection feature is intended to make `gmir`
 well suited as the pager for Gemini browsers like
