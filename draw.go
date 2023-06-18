@@ -59,14 +59,14 @@ func (v View) drawSelectorAndGMIColumn(screen tcell.Screen, offset, selectorColW
 	_, screenHeight := screen.Size()
 	drawnLines, selectorIndex := 0, -1
 	for i := 0; i < len(v.lines) && drawnLines < screenHeight-1; i++ {
-		_, isLink := v.lines[i].(parser.LinkLine)
-		if isLink {
+		isSelectable := v.isSelectable(v.lines[i])
+		if isSelectable {
 			selectorIndex++
 		}
 		if i < v.line {
 			continue
 		}
-		if isLink {
+		if isSelectable {
 			selector := selector.FromIndex(selectorIndex)
 			selector = strings.Repeat(" ", selectorColWidth-len(selector)-1) + selector
 			emitStr(screen, offset, drawnLines, styleText, selector)

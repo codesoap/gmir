@@ -16,11 +16,17 @@ import (
 // FIXME: Search term and scroll position are kept in two places. Make it one.
 
 type Mode int
+type selectable int
 
 const (
 	Regular       = Mode(iota)
 	Search        // Typing a search term.
 	ReverseSearch // Typing a search term for reverse search.
+)
+
+const (
+	link    = selectable(iota)
+	heading // Selecting headings within the table of contents.
 )
 
 // A View represents the whole state related to a document, including
@@ -37,8 +43,8 @@ type View struct {
 	// shifting will be limited by the widest preformatted line in lines.
 	ColOffset int
 
-	// Selector while it is being typed.
-	selector string
+	selectable selectable
+	selector   string // Selector while it is being typed.
 
 	Mode          Mode
 	Searchterm    string         // The search term while it is being typed.
@@ -58,23 +64,20 @@ func NewView(in io.Reader) (View, error) {
 		return View{}, fmt.Errorf("given GMI is empty")
 	}
 	return View{
-		lines: lines,
-		Mode:  Regular,
+		lines:      lines,
+		Mode:       Regular,
+		selectable: link,
 	}, nil
 }
 
-// TOCView returns a copy of v only containing headings. This copy is
-// suitable for use as a table of contents.
+// TOCView returns a copy of v only containing headings and with
+// selectable set to heading. This copy is suitable for use as a table
+// of contents.
 func (v View) TOCView() View {
-	headings := make([]parser.Line, 0)
-	for _, line := range v.lines {
-		if isHeading(line) {
-			headings = append(headings, line)
-		}
-	}
 	return View{
-		lines: headings,
-		Mode:  Regular,
+		lines:      v.headings(),
+		Mode:       Regular,
+		selectable: heading,
 	}
 }
 
@@ -100,6 +103,27 @@ func (v View) links() []parser.LinkLine {
 		}
 	}
 	return links
+}
+
+func (v View) headings() []parser.Line {
+	headings := make([]parser.Line, 0)
+	for _, line := range v.lines {
+		if isHeading(line) {
+			headings = append(headings, line)
+		}
+	}
+	return headings
+}
+
+func (v View) isSelectable(line parser.Line) bool {
+	switch v.selectable {
+	case link:
+		_, isLink := line.(parser.LinkLine)
+		return isLink
+	case heading:
+		return isHeading(line)
+	}
+	panic("unknown selectable")
 }
 
 // FixLineOffset fixes v.lineOffset to ensure it does not go over the
@@ -134,9 +158,17 @@ func (v View) maxLineOffset(screen tcell.Screen, line int) int {
 }
 
 func (v View) columnWidths(screenWidth int) (leftSpace, selectorColWidth, textWidth int) {
-	links := v.links()
-	if len(links) > 0 {
-		selectorColWidth = len(selector.FromIndex(len(links)-1)) + 1
+	var selectableCount int
+	switch v.selectable {
+	case link:
+		selectableCount = len(v.links())
+	case heading:
+		selectableCount = len(v.headings())
+	default:
+		panic("unknown selectable")
+	}
+	if selectableCount > 0 {
+		selectorColWidth = len(selector.FromIndex(selectableCount-1)) + 1
 	}
 	if screenWidth >= maxTextWidth+selectorColWidth {
 		textWidth = maxTextWidth
