@@ -28,7 +28,7 @@ func FromIndex(i int) string {
 func ToIndex(number string) int {
 	n, err := strconv.Atoi(number)
 	if err != nil || n < 1 {
-		panic(fmt.Sprint("invalid selector '%s': ", number, err))
+		panic(fmt.Sprintf("invalid selector '%s': %v", number, err))
 	}
 	return n - 1
 }
