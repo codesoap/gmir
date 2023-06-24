@@ -79,12 +79,13 @@ func ProcessKey(ev *tcell.EventKey) Status {
 		deleteCharUnderCursor()
 		return Reading
 	case tcell.KeyEnter:
-		if line != "" {
-			history = append(history, line)
-			historyIndex = len(history) - 1
-			line = ""
-			cursor = 0
+		if line == "" {
+			return Aborted
 		}
+		history = append(history, line)
+		historyIndex = len(history) - 1
+		line = ""
+		cursor = 0
 		return Done
 	case tcell.KeyEsc, tcell.KeyCtrlC:
 		line = ""
