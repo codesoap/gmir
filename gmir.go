@@ -51,12 +51,15 @@ type View struct {
 	Cursor        int            // Index of first byte of cursored rune in Searchterm. May be up to len(Searchterm).
 	Searchpattern *regexp.Regexp // The active search pattern.
 
+	// The title is displayed in the bar.
+	title string
+
 	// If not "", this info is displayed in the bar. Useful for infos like
 	// "Invalid search pattern" or "No match found".
 	Info string
 }
 
-func NewView(in io.Reader) (View, error) {
+func NewView(in io.Reader, title string) (View, error) {
 	lines, err := parser.Parse(in)
 	if err != nil {
 		return View{}, err
@@ -67,6 +70,7 @@ func NewView(in io.Reader) (View, error) {
 		lines:      lines,
 		Mode:       Regular,
 		selectable: link,
+		title:      title,
 	}, nil
 }
 
@@ -78,6 +82,7 @@ func (v View) TOCView() View {
 		lines:      v.headings(),
 		Mode:       Regular,
 		selectable: heading,
+		title:      "Table of contents",
 	}
 }
 

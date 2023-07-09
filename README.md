@@ -32,11 +32,12 @@ version 1.15 or older, use `go get` instead.
 ```
 $ gmir -h
 Usage:
-gmir [-u] [FILE]
+gmir [-u] [-t TITLE] [FILE]
 If FILE is not given, standard input is read.
 
 Options:
 -u  Hide URLs of links by default
+-t  Set a title that is displayed in the bar.
 
 Key bindings:
 Up, k     : Scroll up one line
@@ -67,5 +68,3 @@ q         : Quit
 Here are some ideas on what could be added in the future, in no
 particular order:
 - Add key bindings for going back, forward and reloading a page.
-- Enable passing a "title" that is displayed in the status line. This
-  could be used to display the currently visited URL.

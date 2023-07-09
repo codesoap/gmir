@@ -16,15 +16,17 @@ import (
 
 var (
 	uFlag bool
+	tFlag string
 )
 
 func showUsageInfo() {
 	fmt.Fprintln(flag.CommandLine.Output(), `Usage:
-gmir [-u] [FILE]
+gmir [-u] [-t TITLE] [FILE]
 If FILE is not given, standard input is read.
 
 Options:
 -u  Hide URLs of links by default
+-t  Set a title that is displayed in the bar.
 
 Key bindings:
 Up, k     : Scroll up one line
@@ -67,13 +69,14 @@ func (vs *views) activeView() *gmir.View {
 func init() {
 	flag.Usage = showUsageInfo
 	flag.BoolVar(&uFlag, "u", false, "Hide URLs on link lines by default")
+	flag.StringVar(&tFlag, "t", "", "Set a title that is displayed in the bar")
 	flag.Parse()
 }
 
 func main() {
 	in := getInput()
 	defer in.Close()
-	doc, err := gmir.NewView(in)
+	doc, err := gmir.NewView(in, tFlag)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Could not parse input:", err)
 		os.Exit(1)
