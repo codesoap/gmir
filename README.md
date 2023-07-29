@@ -52,6 +52,8 @@ g         : Go to the top
 G         : Go to the bottom
 h         : Go to next heading
 H         : Go to previous heading
+s         : Go to next paragraph
+S         : Go to previous paragraph
 t         : Show table of contents
 /         : Start search
 ?         : Start reverse search

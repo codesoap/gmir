@@ -97,6 +97,33 @@ func isHeading(line parser.Line) bool {
 	return isHeading1 || isHeading2 || isHeading3
 }
 
+// ScrollToNextParagraph scrolls to the first line of the next pargraph.
+func (v *View) ScrollToNextParagraph(screen tcell.Screen) {
+	for i := v.line + 1; i < len(v.lines)-2; i++ {
+		if v.lines[i].Text() == "" && v.lines[i+1].Text() != "" {
+			v.line = i + 1
+			v.lineOffset = 0
+			return
+		}
+	}
+}
+
+// ScrollToPrevParagraph scrolls to the first line of the current
+// paragraph, if not already there. Otherwise, it scrolls to the first
+// line of the previous paragraph.
+func (v *View) ScrollToPrevParagraph(screen tcell.Screen) {
+	if v.lineOffset > 0 {
+		v.lineOffset = 0
+		return
+	}
+	for i := v.line - 1; i >= 0; i-- {
+		if v.lines[i].Text() != "" && (i == 0 || v.lines[i-1].Text() == "") {
+			v.line = i
+			return
+		}
+	}
+}
+
 // ScrollDownToSearchMatch scrolls to the next line, that matches
 // v.Searchpattern. If the current line matches v.Searchpattern, nothing
 // is done.

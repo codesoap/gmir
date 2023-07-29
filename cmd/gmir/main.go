@@ -41,6 +41,8 @@ g         : Go to the top
 G         : Go to the bottom
 h         : Go to next heading
 H         : Go to previous heading
+s         : Go to next paragraph
+S         : Go to previous paragraph
 t         : Show table of contents
 /         : Start search
 ?         : Start reverse search
@@ -204,6 +206,10 @@ func processKeyEvent(ev *tcell.EventKey, vs *views, s tcell.Screen) {
 			v.ScrollToNextHeading(s)
 		case 'H':
 			v.ScrollToPrevHeading(s)
+		case 's':
+			v.ScrollToNextParagraph(s)
+		case 'S':
+			v.ScrollToPrevParagraph(s)
 		case 't':
 			if vs.toc.IsEmpty() {
 				v.Info = "Table of contents is empty"
