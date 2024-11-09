@@ -11,7 +11,7 @@ import (
 	"github.com/codesoap/gmir"
 	"github.com/codesoap/gmir/readline"
 	"github.com/gdamore/tcell/v2"
-	"github.com/gdamore/tcell/v2/encoding"
+	_ "github.com/gdamore/tcell/v2/encoding"
 )
 
 var (
@@ -87,7 +87,6 @@ func main() {
 		doc.HideURLs()
 	}
 
-	encoding.Register()
 	s, e := tcell.NewScreen()
 	if e != nil {
 		fmt.Fprintf(os.Stderr, "%v\n", e)
